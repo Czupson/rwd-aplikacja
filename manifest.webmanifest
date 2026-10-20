@@ -1,0 +1,9 @@
+{
+  "name": "RWD_aplikacja",
+  "short_name": "RWD",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2196f3"
+}
