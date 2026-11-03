@@ -35,7 +35,11 @@
 
         <h3>Wibracje urządzenia</h3>
 
-        <button id="vibrationButton">Włącz wibracje</button>    
+        <button id="vibrationButton">Włącz wibracje</button>   
+        
+        <h3>Orientacja ekranu</h3>
+
+        <p id="screenOrientation">Orientacja: oczekiwanie...</p>
     </div>
 
     <script>
@@ -160,6 +164,26 @@
                     alert("Wibracje nie są obsługiwane przez to urządzenie.");
                 }
             });
+        
+        const orientationQuery = window.matchMedia("(orientation: portrait)");
+
+        function updateScreenOrientation() {
+            if (orientationQuery.matches) {
+                document.getElementById("screenOrientation").textContent =
+                    "Orientacja ekranu: pionowa";
+            } else {
+                document.getElementById("screenOrientation").textContent =
+                    "Orientacja ekranu: pozioma";
+            }
+        }
+
+        updateScreenOrientation();
+
+        orientationQuery.addEventListener(
+            "change",
+            updateScreenOrientation
+        );
+
     </script>
 
     <script>
