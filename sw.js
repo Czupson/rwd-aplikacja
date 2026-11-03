@@ -1,4 +1,4 @@
-const CACHE_NAME = "rwd-cache-v2";
+const CACHE_NAME = "rwd-cache-v3";
 
 const FILES_TO_CACHE = [
     "./",
