@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -25,6 +24,14 @@
         <p id="gamma">Gamma: oczekiwanie...</p>
 
         <button id="orientationButton">Włącz orientację</button>
+
+        <h3>Ruch urządzenia</h3>
+
+        <p id="accelerationX">X: oczekiwanie...</p>
+        <p id="accelerationY">Y: oczekiwanie...</p>
+        <p id="accelerationZ">Z: oczekiwanie...</p>
+
+        <button id="motionButton">Włącz wykrywanie ruchu</button>
     </div>
 
     <script>
@@ -90,6 +97,53 @@
                     }
                 } else {
                     startOrientation();
+                }
+            });
+        
+        function startMotion() {
+            if (!("DeviceMotionEvent" in window)) {
+                alert("Wykrywanie ruchu nie jest obsługiwane.");
+                return;
+            }
+
+            window.addEventListener("devicemotion", (event) => {
+                const acceleration = event.accelerationIncludingGravity;
+
+                if (!acceleration) {
+                    return;
+                }
+
+                document.getElementById("accelerationX").textContent =
+                    "X: " + (acceleration.x?.toFixed(2) ?? "brak danych");
+
+                document.getElementById("accelerationY").textContent =
+                    "Y: " + (acceleration.y?.toFixed(2) ?? "brak danych");
+
+                document.getElementById("accelerationZ").textContent =
+                    "Z: " + (acceleration.z?.toFixed(2) ?? "brak danych");
+            });
+        }
+
+        document.getElementById("motionButton")
+            .addEventListener("click", async () => {
+
+                if (
+                    typeof DeviceMotionEvent.requestPermission === "function"
+                ) {
+                    try {
+                        const permission =
+                            await DeviceMotionEvent.requestPermission();
+
+                        if (permission === "granted") {
+                            startMotion();
+                        } else {
+                            alert("Brak zgody na dostęp do czujników ruchu.");
+                        }
+                    } catch (error) {
+                        alert("Nie udało się uzyskać dostępu do czujników ruchu.");
+                    }
+                } else {
+                    startMotion();
                 }
             });
     </script>
