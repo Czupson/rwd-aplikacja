@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Moja lokalizacja LIVE</title>
+    <title>Moja lokalizacja i orientacja</title>
 
     <meta name="theme-color" content="#2196f3">
     <link rel="manifest" href="./manifest.webmanifest">
@@ -16,6 +17,14 @@
     <div class="container">
         <p id="latitude">Szerokość: oczekiwanie...</p>
         <p id="longitude">Długość: oczekiwanie...</p>
+
+        <h3>Orientacja urządzenia</h3>
+
+        <p id="alpha">Alpha: oczekiwanie...</p>
+        <p id="beta">Beta: oczekiwanie...</p>
+        <p id="gamma">Gamma: oczekiwanie...</p>
+
+        <button id="orientationButton">Włącz orientację</button>
     </div>
 
     <script>
@@ -41,10 +50,48 @@
                     timeout: 10000
                 }
             );
-        } else {
-            document.getElementById("latitude").textContent =
-                "Geolocation API nie jest obsługiwane.";
         }
+
+        function startOrientation() {
+            if (!("DeviceOrientationEvent" in window)) {
+                alert("Orientacja urządzenia nie jest obsługiwana.");
+                return;
+            }
+
+            window.addEventListener("deviceorientation", (event) => {
+                document.getElementById("alpha").textContent =
+                    "Alpha: " + (event.alpha?.toFixed(2) ?? "brak danych");
+
+                document.getElementById("beta").textContent =
+                    "Beta: " + (event.beta?.toFixed(2) ?? "brak danych");
+
+                document.getElementById("gamma").textContent =
+                    "Gamma: " + (event.gamma?.toFixed(2) ?? "brak danych");
+            });
+        }
+
+        document.getElementById("orientationButton")
+            .addEventListener("click", async () => {
+
+                if (
+                    typeof DeviceOrientationEvent.requestPermission === "function"
+                ) {
+                    try {
+                        const permission =
+                            await DeviceOrientationEvent.requestPermission();
+
+                        if (permission === "granted") {
+                            startOrientation();
+                        } else {
+                            alert("Brak zgody na dostęp do orientacji.");
+                        }
+                    } catch (error) {
+                        alert("Nie udało się uzyskać dostępu do orientacji.");
+                    }
+                } else {
+                    startOrientation();
+                }
+            });
     </script>
 
     <script>
