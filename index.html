@@ -4,22 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>RWD Zadanko</title>
+    <title>Moja lokalizacja LIVE</title>
 
     <meta name="theme-color" content="#2196f3">
-    <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="apple-touch-icon" href="./icons/ikona.png">
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
     <div class="container">
-        <div class="a">a</div>
-        <div class="b">b</div>
-        <div class="c">c</div>
-        <div class="d">d</div>
-        <div class="e">e</div>
-        <div class="f">f</div>
+        <p id="latitude">Szerokość: oczekiwanie...</p>
+        <p id="longitude">Długość: oczekiwanie...</p>
     </div>
+
+    <script>
+        if ("geolocation" in navigator) {
+            navigator.geolocation.watchPosition(
+                (position) => {
+                    document.getElementById("latitude").textContent =
+                        "Szerokość: " + position.coords.latitude;
+
+                    document.getElementById("longitude").textContent =
+                        "Długość: " + position.coords.longitude;
+                },
+                (error) => {
+                    document.getElementById("latitude").textContent =
+                        "Nie udało się pobrać lokalizacji.";
+
+                    document.getElementById("longitude").textContent =
+                        error.message;
+                },
+                {
+                    enableHighAccuracy: true,
+                    maximumAge: 0,
+                    timeout: 10000
+                }
+            );
+        } else {
+            document.getElementById("latitude").textContent =
+                "Geolocation API nie jest obsługiwane.";
+        }
+    </script>
 
     <script>
         if ("serviceWorker" in navigator) {
